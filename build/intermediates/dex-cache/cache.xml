@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/classes-df1739e2d7d24af3996f6a9ab0b270bf70c41dfc.jar" />
+    </item>
+    <item
+        jar="/Users/user/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-0fe70773af0f54177a73d77a5164a79aa0c1f7f0.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/classes-72919bc387c301edfc2cc0afba591f1f45e56669.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0-2a2adc9a1ee12ac4ff7c5901bab147f60237bd20.jar" />
+    </item>
+    <item
+        jar="/Users/user/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.0/support-annotations-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.0-0d3fdb4a6e449db47bf564a800a3f11893b44ade.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1c1afa0ab2a8197a5da1b36c4167a9e479cb74d9">
+        <dex dex="/Users/user/AndroidStudioProjects/MyApplication/between/app/build/intermediates/pre-dexed/debug/classes-5e4142f1048e4fc42539edd653c6f167eb394969.jar" />
+    </item>
+
+</items>
