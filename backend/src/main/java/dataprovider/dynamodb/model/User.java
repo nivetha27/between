@@ -37,4 +37,11 @@ public class User {
     userModel.setCategories(user.getCategories());
     return userModel;
   }
+
+  public core.entities.User toUser() {
+    core.entities.User user = new core.entities.User();
+    user.setUserId(getUserId());
+    user.setCategories(getCategories());
+    return user;
+  }
 }

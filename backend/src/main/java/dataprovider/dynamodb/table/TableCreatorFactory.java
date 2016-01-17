@@ -1,15 +1,15 @@
-package dataprovider.dynamodb;
+package dataprovider.dynamodb.table;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
-public class DynamoDBDataProviderFactory {
+public class TableCreatorFactory {
 
-  /*public static DynamoDBDataProvider create() {
+  public static TableCreator create() {
     AmazonDynamoDBClient amazonDynamoDBClient = getDynamoDBClient();
-    DynamoDBDataProvider dynamoDBDataProvider = new DynamoDBDataProvider(amazonDynamoDBClient);
-    return dynamoDBDataProvider;
+    TableCreator tableCreator = new TableCreator(amazonDynamoDBClient);
+    return tableCreator;
   }
 
   private static AmazonDynamoDBClient getDynamoDBClient() {
@@ -17,5 +17,5 @@ public class DynamoDBDataProviderFactory {
     AmazonDynamoDBClient amazonDynamoDBClient = new AmazonDynamoDBClient(awsCredentials);
     amazonDynamoDBClient.setEndpoint("http://localhost:8000");
     return amazonDynamoDBClient;
-  }*/
+  }
 }
