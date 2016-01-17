@@ -2,27 +2,27 @@ package core.entities;
 
 public class Choice {
 
-  private String topicId;
+  private Integer choiceId;
 
-  private String choiceId;
+  private String caption;
 
   private String imageUrl;
 
-  private long votes;
+  private Long votes;
 
-  public String getTopicId() {
-    return topicId;
+  public String getCaption() {
+    return caption;
   }
 
-  public void setTopicId(String topicId) {
-    this.topicId = topicId;
+  public void setCaption(String caption) {
+    this.caption = caption;
   }
 
-  public String getChoiceId() {
+  public Integer getChoiceId() {
     return choiceId;
   }
 
-  public void setChoiceId(String choiceId) {
+  public void setChoiceId(Integer choiceId) {
     this.choiceId = choiceId;
   }
 
