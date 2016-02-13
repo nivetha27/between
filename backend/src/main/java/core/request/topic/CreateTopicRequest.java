@@ -1,22 +1,20 @@
-package core.entities;
+package core.request.topic;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class Topic {
-
-  private String topicId;
-
-  private String userId;
+public class CreateTopicRequest {
 
   private String description;
 
   private String category;
 
-  private DateTime dateTime;
-
   private List<Choice> choices;
+
+  private String userId;
 
   public List<Choice> getChoices() {
     return choices;
@@ -24,22 +22,6 @@ public class Topic {
 
   public void setChoices(List<Choice> choices) {
     this.choices = choices;
-  }
-
-  public DateTime getDateTime() {
-    return dateTime;
-  }
-
-  public void setDateTime(DateTime dateTime) {
-    this.dateTime = dateTime;
-  }
-
-  public String getTopicId() {
-    return topicId;
-  }
-
-  public void setTopicId(String topicId) {
-    this.topicId = topicId;
   }
 
   public String getDescription() {
@@ -64,5 +46,21 @@ public class Topic {
 
   public void setUserId(String userId) {
     this.userId = userId;
+  }
+
+  public core.entities.Topic toCoreTopic() {
+    core.entities.Topic topic = new core.entities.Topic();
+    topic.setTopicId(UUID.randomUUID().toString());
+    topic.setDateTime(DateTime.now());
+    topic.setDescription(getDescription());
+    topic.setCategory(getCategory());
+    topic.setUserId(getUserId());
+    List<core.entities.Choice> coreChoices = new ArrayList<>();
+    int counter = 0;
+    for (Choice choice : getChoices()) {
+      coreChoices.add(choice.toCoreChoice(++counter));
+    }
+    topic.setChoices(new ArrayList<>(coreChoices));
+    return topic;
   }
 }

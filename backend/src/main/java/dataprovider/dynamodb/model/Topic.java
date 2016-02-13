@@ -56,6 +56,17 @@ public class Topic {
 
   private List<Choice> choices;
 
+  private String userId;
+
+  @DynamoDBAttribute(attributeName = "userId")
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   @DynamoDBAttribute(attributeName = "choices")
   @DynamoDBMarshalling(marshallerClass = ChoiceMarshaller.class)
   public List<Choice> getChoices() {
@@ -109,6 +120,7 @@ public class Topic {
     topicModel.setCategory(topic.getCategory());
     topicModel.setChoices(new ArrayList<Choice>(topic.getChoices()));
     topicModel.setDateTime(topic.getDateTime().toString());
+    topicModel.setUserId(topic.getUserId());
     return topicModel;
   }
 
@@ -119,6 +131,7 @@ public class Topic {
     topic.setCategory(getCategory());
     topic.setChoices(new ArrayList<Choice>(getChoices()));
     topic.setDateTime(DateTime.parse(getDateTime()));
+    topic.setUserId(getUserId());
     return topic;
   }
 }

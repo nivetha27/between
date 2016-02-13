@@ -2,6 +2,8 @@ package restservice.controller;
 
 import com.google.common.collect.Lists;
 import core.entities.User;
+import core.request.user.CreateUserRequest;
+import core.request.user.UpdateUserRequest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,15 +23,16 @@ import restservice.Main;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static restservice.controller.TestUtils.json;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Main.class)
@@ -49,12 +52,11 @@ public class UserControllerTest {
 
   @Autowired
   void setConverters(HttpMessageConverter<?>[] converters) {
-
-    this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream().filter(
+    mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream().filter(
         hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().get();
 
     Assert.assertNotNull("the JSON message converter must not be null",
-        this.mappingJackson2HttpMessageConverter);
+        mappingJackson2HttpMessageConverter);
   }
 
   @Before
@@ -63,12 +65,13 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createAndGetUser() throws Exception {
+  public void testCreateAndGetUser() throws Exception {
     String userId = UUID.randomUUID().toString();
-    User user = new User();
-    user.setUserId(userId);
-    user.setCategories(Arrays.asList("category1", "category2"));
-    String userJson = json(user);
+    List<String> categories = Arrays.asList("category1", "category2");
+    CreateUserRequest createUserRequest = new CreateUserRequest();
+    createUserRequest.setUserId(userId);
+    createUserRequest.setCategories(categories);
+    String userJson = json(createUserRequest, mappingJackson2HttpMessageConverter);
     this.mockMvc.perform(post("/user")
         .contentType(contentType)
         .content(userJson))
@@ -76,13 +79,63 @@ public class UserControllerTest {
     this.mockMvc.perform(get("/user")
     .param("id", userId))
         .andExpect(status().isAccepted())
-        .andExpect(content().contentType(contentType));
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.userId", is(userId)))
+        .andExpect(jsonPath("$.categories", is(categories)));
   }
 
-  protected String json(Object o) throws IOException {
-    MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
-    this.mappingJackson2HttpMessageConverter.write(
-        o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-    return mockHttpOutputMessage.getBodyAsString();
+  @Test
+  public void testUpdateUser() throws Exception {
+    String userId = UUID.randomUUID().toString();
+    List<String> categories = Arrays.asList("category1", "category2");
+    CreateUserRequest createUserRequest = new CreateUserRequest();
+    createUserRequest.setUserId(userId);
+    createUserRequest.setCategories(categories);
+    String userJson = json(createUserRequest, mappingJackson2HttpMessageConverter);
+    this.mockMvc.perform(post("/user")
+        .contentType(contentType)
+        .content(userJson))
+        .andExpect(status().isCreated());
+    this.mockMvc.perform(get("/user")
+        .param("id", userId))
+        .andExpect(status().isAccepted())
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.userId", is(userId)))
+        .andExpect(jsonPath("$.categories", is(categories)));
+
+    List<String> updatedCategories = Arrays.asList("category3", "category4");
+    UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+    updateUserRequest.setUserId(userId);
+    updateUserRequest.setCategories(updatedCategories);
+    String updatedUserJson = json(updateUserRequest, mappingJackson2HttpMessageConverter);
+
+    this.mockMvc.perform(put("/user")
+        .contentType(contentType)
+        .content(updatedUserJson))
+        .andExpect(status().isAccepted());
+    this.mockMvc.perform(get("/user")
+        .param("id", userId))
+        .andExpect(status().isAccepted())
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.userId", is(userId)))
+        .andExpect(jsonPath("$.categories", is(updatedCategories)));
+  }
+
+  @Test
+  public void testDeleteUser() throws Exception {
+    String userId = UUID.randomUUID().toString();
+    List<String> categories = Arrays.asList("category1", "category2");
+    CreateUserRequest createUserRequest = new CreateUserRequest();
+    createUserRequest.setUserId(userId);
+    createUserRequest.setCategories(categories);
+    String userJson = json(createUserRequest, mappingJackson2HttpMessageConverter);
+    this.mockMvc.perform(post("/user")
+        .contentType(contentType)
+        .content(userJson))
+        .andExpect(status().isCreated());
+
+    this.mockMvc.perform(delete("/user")
+        .param("id", userId))
+        .andExpect(status().isAccepted());
   }
 }

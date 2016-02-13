@@ -76,7 +76,7 @@ public class Vote {
 
   public static Vote fromVote(core.entities.Vote vote) {
     Vote voteModel = new Vote();
-    voteModel.setUserId(vote.getVoteId());
+    voteModel.setUserId(vote.getUserId());
     voteModel.setChoiceId(vote.getChoiceId());
     voteModel.setComment(vote.getComment());
     voteModel.setVoteId(vote.getVoteId());

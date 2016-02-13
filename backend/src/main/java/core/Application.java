@@ -2,18 +2,14 @@ package core;
 
 import core.entities.Topic;
 import core.entities.User;
+import core.entities.Vote;
 import core.exceptions.EntityNotFoundException;
-import core.requests.*;
-import core.responses.*;
 import dataprovider.DataProvider;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 public class Application {
-
-  private final static Log logger = LogFactory.getLog(Application.class);
 
   private final DataProvider dataProvider;
 
@@ -33,33 +29,43 @@ public class Application {
     throw new EntityNotFoundException("user not found");
   }
 
-  public CreateTopicResponse createTopic(CreateTopicRequest createTopicRequest) {
-    try {
-      dataProvider.createTopic(createTopicRequest.toTopic());
-      return new CreateTopicResponse.Builder(true).create();
-    } catch (Exception e) {
-      logger.error("CreateTopic failed for " + createTopicRequest.getTopicId(), e);
-      return new CreateTopicResponse.Builder(false).create();
-    }
+  public void updateUser(User user) {
+    dataProvider.updateUser(user);
   }
 
-  public VoteTopicResponse voteChoice(VoteTopicRequest request) {
-    try {
-      dataProvider.voteTopic(request.toVote());
-      return new VoteTopicResponse.Builder(true).create();
-    } catch (Exception e) {
-      logger.error("VoteTopic failed for " + request.getChoiceId(), e);
-      return new VoteTopicResponse.Builder(false).create();
-    }
+  public void deleteUser(String userId) {
+    dataProvider.deleteUser(userId);
   }
 
-  public GetTopicResponse getTopic(GetTopicRequest request) {
-    try {
-      Topic topic = dataProvider.getTopic(request.getTopicId());
-      return new GetTopicResponse.Builder(true, topic).create();
-    } catch (Exception e) {
-      logger.error("GetTopic failed for " + request.getTopicId(), e);
-      return new GetTopicResponse.Builder(false, null).create();
+  public void createTopic(Topic topic) {
+      dataProvider.createTopic(topic);
+  }
+
+  public Topic getTopic(String topicId) {
+    Optional<Topic> topic = dataProvider.getTopic(topicId);
+    if (topic.isPresent()) {
+      return topic.get();
     }
+    throw new EntityNotFoundException("topic not found");
+  }
+
+  public void voteTopic(Vote vote) {
+      dataProvider.voteTopic(vote);
+  }
+
+  public void deleteTopic(String topicId) {
+    dataProvider.deleteTopic(topicId);
+  }
+
+  public List<Topic> listTopicsByCategory(String category, Integer pageNumber, Integer limit) {
+    return dataProvider.getTopicsByCategory(category, pageNumber, limit);
+  }
+
+  public List<Topic> listTopicsCreatedByUser(String userId, Integer pageNumber, Integer limit) {
+    return dataProvider.getTopicsCreatedByUser(userId, pageNumber, limit);
+  }
+
+  public List<Topic> listTopicsVotedByUser(String userId, Integer pageNumber, Integer limit) {
+    return dataProvider.getTopicsVotedByUser(userId, pageNumber, limit);
   }
 }

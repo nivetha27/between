@@ -28,12 +28,9 @@ public class TableCreator {
 
   public void recreateTables() {
     ListTablesResult tables = dynamoDBClient.listTables();
-    System.out.println(tables);
     if (tables.getTableNames().contains("User")) {
-      System.out.println("deleting table");
       dynamoDBClient.deleteTable("User");
       tables = dynamoDBClient.listTables();
-      System.out.println(tables);
     }
     if (tables.getTableNames().contains("Topic")) {
       dynamoDBClient.deleteTable("Topic");
@@ -70,17 +67,52 @@ public class TableCreator {
     attributeDefinitions.add(new AttributeDefinition()
         .withAttributeName("topicId")
         .withAttributeType("S"));
+    attributeDefinitions.add(new AttributeDefinition()
+        .withAttributeName("userId")
+        .withAttributeType("S"));
+    attributeDefinitions.add(new AttributeDefinition()
+        .withAttributeName("category")
+        .withAttributeType("S"));
     ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
     keySchema.add(new KeySchemaElement()
         .withAttributeName("topicId")
         .withKeyType(KeyType.HASH));
+
+    ArrayList<KeySchemaElement> userIndexKeySchema = new ArrayList<KeySchemaElement>();
+    userIndexKeySchema.add(new KeySchemaElement()
+        .withAttributeName("userId")
+        .withKeyType(KeyType.HASH));
+
+    GlobalSecondaryIndex userIndex = new GlobalSecondaryIndex()
+        .withIndexName("userTopicIndex")
+        .withProvisionedThroughput(new ProvisionedThroughput()
+            .withReadCapacityUnits((long) 1)
+            .withWriteCapacityUnits((long) 1))
+        .withProjection(new Projection().withProjectionType(ProjectionType.KEYS_ONLY))
+        .withKeySchema(userIndexKeySchema);
+
+    ArrayList<KeySchemaElement> categoryKeySchema = new ArrayList<KeySchemaElement>();
+    categoryKeySchema.add(new KeySchemaElement()
+        .withAttributeName("category")
+        .withKeyType(KeyType.HASH));
+
+    GlobalSecondaryIndex categoryIndex = new GlobalSecondaryIndex()
+        .withIndexName("categoryTopicIndex")
+        .withProvisionedThroughput(new ProvisionedThroughput()
+            .withReadCapacityUnits((long) 1)
+            .withWriteCapacityUnits((long) 1))
+        .withProjection(new Projection().withProjectionType(ProjectionType.KEYS_ONLY))
+        .withKeySchema(categoryKeySchema);
+
     CreateTableRequest request = new CreateTableRequest()
         .withTableName("Topic")
         .withKeySchema(keySchema)
         .withAttributeDefinitions(attributeDefinitions)
         .withProvisionedThroughput( new ProvisionedThroughput()
             .withReadCapacityUnits((long) 1)
-            .withWriteCapacityUnits((long) 1));
+            .withWriteCapacityUnits((long) 1))
+        .withGlobalSecondaryIndexes(userIndex, categoryIndex);
+
     dynamoDBClient.createTable(request);
   }
 
@@ -93,54 +125,70 @@ public class TableCreator {
         .withAttributeName("topicId")
         .withAttributeType("S"));
     attributeDefinitions.add(new AttributeDefinition()
-        .withAttributeName("choiceId")
-        .withAttributeType("S"));
-    attributeDefinitions.add(new AttributeDefinition()
         .withAttributeName("userId")
         .withAttributeType("S"));
     attributeDefinitions.add(new AttributeDefinition()
-        .withAttributeName("dateTime")
+        .withAttributeName("choiceId")
         .withAttributeType("S"));
     ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
     keySchema.add(new KeySchemaElement()
         .withAttributeName("voteId")
         .withKeyType(KeyType.HASH));
 
-    GlobalSecondaryIndex topicChoiceIndex = new GlobalSecondaryIndex()
-        .withIndexName("TopicChoiceIndex")
+    GlobalSecondaryIndex topicVoteIndex = new GlobalSecondaryIndex()
+        .withIndexName("topicVoteIndex")
         .withProvisionedThroughput(new ProvisionedThroughput()
             .withReadCapacityUnits((long) 1)
             .withWriteCapacityUnits((long) 1))
-        .withProjection(new Projection().withProjectionType(ProjectionType.KEYS_ONLY));
+        .withProjection(new Projection()
+            .withProjectionType(ProjectionType.KEYS_ONLY)
+        );
 
-    ArrayList<KeySchemaElement> topicChoiceIndexKeySchema = new ArrayList<KeySchemaElement>();
-    topicChoiceIndexKeySchema.add(new KeySchemaElement()
+    ArrayList<KeySchemaElement> topicVoteIndexKeySchema = new ArrayList<KeySchemaElement>();
+    topicVoteIndexKeySchema.add(new KeySchemaElement()
         .withAttributeName("topicId")
         .withKeyType(KeyType.HASH));
-    topicChoiceIndexKeySchema.add(new KeySchemaElement()
+    topicVoteIndexKeySchema.add(new KeySchemaElement()
+        .withAttributeName("userId")
+        .withKeyType(KeyType.RANGE));
+
+    topicVoteIndex.setKeySchema(topicVoteIndexKeySchema);
+
+    GlobalSecondaryIndex topicChoiceVoteIndex = new GlobalSecondaryIndex()
+        .withIndexName("topicChoiceVoteIndex")
+        .withProvisionedThroughput(new ProvisionedThroughput()
+            .withReadCapacityUnits((long) 1)
+            .withWriteCapacityUnits((long) 1))
+        .withProjection(new Projection()
+            .withProjectionType(ProjectionType.KEYS_ONLY)
+        );
+
+    ArrayList<KeySchemaElement> topicChoiceVoteIndexKeySchema = new ArrayList<KeySchemaElement>();
+    topicChoiceVoteIndexKeySchema.add(new KeySchemaElement()
+        .withAttributeName("topicId")
+        .withKeyType(KeyType.HASH));
+    topicChoiceVoteIndexKeySchema.add(new KeySchemaElement()
         .withAttributeName("choiceId")
         .withKeyType(KeyType.RANGE));
 
+    topicChoiceVoteIndex.setKeySchema(topicChoiceVoteIndexKeySchema);
 
-    topicChoiceIndex.setKeySchema(topicChoiceIndexKeySchema);
-
-    GlobalSecondaryIndex userIndex = new GlobalSecondaryIndex()
-        .withIndexName("userIndex")
+    GlobalSecondaryIndex userVoteIndex = new GlobalSecondaryIndex()
+        .withIndexName("userVoteIndex")
         .withProvisionedThroughput(new ProvisionedThroughput()
             .withReadCapacityUnits((long) 1)
             .withWriteCapacityUnits((long) 1))
         .withProjection(new Projection().withProjectionType(ProjectionType.KEYS_ONLY));
 
-    ArrayList<KeySchemaElement> userIndexKeySchema = new ArrayList<KeySchemaElement>();
-    userIndexKeySchema.add(new KeySchemaElement()
+    ArrayList<KeySchemaElement> userVoteIndexKeySchema = new ArrayList<KeySchemaElement>();
+    userVoteIndexKeySchema.add(new KeySchemaElement()
         .withAttributeName("userId")
         .withKeyType(KeyType.HASH));
-    userIndexKeySchema.add(new KeySchemaElement()
-        .withAttributeName("dateTime")
+    userVoteIndexKeySchema.add(new KeySchemaElement()
+        .withAttributeName("topicId")
         .withKeyType(KeyType.RANGE));
 
-
-    userIndex.setKeySchema(userIndexKeySchema);
+    userVoteIndex.setKeySchema(userVoteIndexKeySchema);
 
     CreateTableRequest request = new CreateTableRequest()
         .withTableName("Vote")
@@ -149,7 +197,7 @@ public class TableCreator {
         .withProvisionedThroughput( new ProvisionedThroughput()
             .withReadCapacityUnits((long) 1)
             .withWriteCapacityUnits((long) 1))
-        .withGlobalSecondaryIndexes(topicChoiceIndex, userIndex);
+        .withGlobalSecondaryIndexes(topicVoteIndex, userVoteIndex, topicChoiceVoteIndex);
 
     dynamoDBClient.createTable(request);
   }

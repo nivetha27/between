@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'idea'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'application'
 
 version = '1.0'
 
@@ -16,9 +18,13 @@ jar {
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
     }
 }
 
@@ -28,11 +34,43 @@ sourceCompatibility = "1.8"
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.2.4.RELEASE'
+    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '0.8.1'
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.10.15'
-    compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
-    compile group: 'log4j', name: 'log4j', version: '1.2.11'
+    compile group: 'log4j', name: 'log4j', version: '1.2.12'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module : 'spring-boot-starter-logging'
+    }
+    compile('org.apache.hadoop:hadoop-core:1.2.1')
+    compile('org.apache.hadoop:hadoop-common:2.7.1')
+
+}
+
+springBoot {
+    mainClass = "restservice.Main"
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'aggregator.hadoop.Main'
+    }
+}
+
+task uberjar(type: Jar) {
+    baseName = 'vote-aggregator'
+    version = '1.0'
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}} {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+        exclude{it.path.contains('META-INF')}
+        exclude "LICENSE.txt"
+    }
+
+    manifest {
+        attributes 'Main-Class': 'aggregator.hadoop.Main'
+    }
 }
 
 task wrapper(type: Wrapper) {
