@@ -71,9 +71,10 @@ public final class DynamoDBDataProvider implements DataProvider {
   }
 
   @Override
-  public void createTopic(Topic topic) {
+  public String createTopic(Topic topic) {
     dataprovider.dynamodb.model.Topic topicModel = dataprovider.dynamodb.model.Topic.fromTopic(topic);
     mapper.save(topicModel);
+    return topicModel.getTopicId();
   }
 
   @Override

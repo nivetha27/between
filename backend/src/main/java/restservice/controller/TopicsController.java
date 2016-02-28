@@ -35,7 +35,7 @@ public class TopicsController {
       Preconditions.checkState(!Strings.isNullOrEmpty(category), "category should not be null or empty");
       Preconditions.checkState(limit >= 1 && limit <= 20, "limit value should be between 1 and 20");
       List<Topic> topics = application.listTopicsByCategory(category, pageNumber, limit);
-      return new ResponseEntity(topics, HttpStatus.ACCEPTED);
+      return new ResponseEntity(topics, HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (Exception e) {
@@ -53,7 +53,7 @@ public class TopicsController {
       Preconditions.checkState(!Strings.isNullOrEmpty(userId), "userId should not be null or empty");
       Preconditions.checkState(limit >= 1 && limit <= 20, "limit value should be between 1 and 20");
       List<Topic> topics = application.listTopicsCreatedByUser(userId, pageNumber, limit);
-      return new ResponseEntity(topics, HttpStatus.ACCEPTED);
+      return new ResponseEntity(topics, HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (Exception e) {
@@ -71,7 +71,7 @@ public class TopicsController {
       Preconditions.checkState(!Strings.isNullOrEmpty(userId), "userId should not be null or empty");
       Preconditions.checkState(limit >= 1 && limit <= 20, "limit value should be between 1 and 20");
       List<Topic> topics = application.listTopicsVotedByUser(userId, pageNumber, limit);
-      return new ResponseEntity(topics, HttpStatus.ACCEPTED);
+      return new ResponseEntity(topics, HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (Exception e) {

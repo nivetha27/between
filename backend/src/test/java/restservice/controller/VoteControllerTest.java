@@ -70,7 +70,7 @@ public class VoteControllerTest {
     this.mockMvc.perform(post("/vote")
         .contentType(contentType)
         .content(voteJson))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -86,7 +86,7 @@ public class VoteControllerTest {
     this.mockMvc.perform(post("/vote")
         .contentType(contentType)
         .content(voteJson))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
 
     this.mockMvc.perform(post("/vote")
         .contentType(contentType)

@@ -90,6 +90,35 @@ public class TopicControllerTest {
   }
 
   @Test
+  public void testGetTopic() throws Exception {
+    String topicId = UUID.randomUUID().toString();
+    DateTime now = DateTime.now();
+    Topic topic = new Topic();
+    topic.setTopicId(topicId);
+    topic.setCategory("category");
+    topic.setDateTime(now);
+    topic.setDescription("description");
+    core.entities.Choice choice1 = new core.entities.Choice();
+    choice1.setChoiceId(1);
+    choice1.setCaption("caption1");
+    choice1.setImageUrl("url1");
+    choice1.setVotes(0);
+    core.entities.Choice choice2 = new core.entities.Choice();
+    choice2.setChoiceId(1);
+    choice2.setCaption("caption2");
+    choice2.setImageUrl("url2");
+    choice2.setVotes(0);
+    topic.setChoices(Arrays.asList(choice1, choice2));
+    String userId = UUID.randomUUID().toString();
+    topic.setUserId(userId);
+    application.createTopic(topic);
+
+    this.mockMvc.perform(get("/topic")
+        .param("id", topicId))
+        .andExpect(status().isOk());
+  }
+
+  @Test
   public void testDeleteTopic() throws Exception {
     String topicId = UUID.randomUUID().toString();
     DateTime now = DateTime.now();
@@ -115,6 +144,6 @@ public class TopicControllerTest {
 
     this.mockMvc.perform(delete("/topic")
         .param("id", topicId))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
   }
 }

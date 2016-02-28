@@ -10,6 +10,7 @@ import dataprovider.dynamodb.model.Vote;
 import dataprovider.dynamodb.table.TableCreator;
 import dataprovider.dynamodb.table.TableCreatorFactory;
 import org.joda.time.DateTime;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

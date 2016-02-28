@@ -29,6 +29,7 @@ public class VoteAggregator {
   }
 
   public void removeDuplicateVotes(String topicId) {
+    System.out.println("Removing duplicates: " + topicId);
     Map<String, AttributeValue> attributeValueMap = new HashMap<String, AttributeValue>();
     attributeValueMap.put(":val1", new AttributeValue().withS(topicId));
 
@@ -70,10 +71,10 @@ public class VoteAggregator {
   }
 
   private void aggregateVotes(String topicId, Integer choiceId) {
-
+    System.out.println("aggregating votes: " + topicId + " choice: " + choiceId);
     Map<String, AttributeValue> attributeValueMap = new HashMap<String, AttributeValue>();
     attributeValueMap.put(":val1", new AttributeValue().withS(topicId));
-    attributeValueMap.put(":val2", new AttributeValue().withS(choiceId.toString()));
+    attributeValueMap.put(":val2", new AttributeValue().withS(String.valueOf(choiceId)));
 
     DynamoDBQueryExpression<Vote> queryExpression =
         new DynamoDBQueryExpression<dataprovider.dynamodb.model.Vote>()
@@ -93,6 +94,7 @@ public class VoteAggregator {
 
       List<Object> results = resultPage.getResults();
       if (results != null) {
+        System.out.println("vote size: " + results.size());
         choiceVotes += results.size();
       }
     }

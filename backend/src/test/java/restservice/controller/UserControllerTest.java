@@ -78,7 +78,7 @@ public class UserControllerTest {
         .andExpect(status().isCreated());
     this.mockMvc.perform(get("/user")
     .param("id", userId))
-        .andExpect(status().isAccepted())
+        .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
         .andExpect(jsonPath("$.userId", is(userId)))
         .andExpect(jsonPath("$.categories", is(categories)));
@@ -98,7 +98,7 @@ public class UserControllerTest {
         .andExpect(status().isCreated());
     this.mockMvc.perform(get("/user")
         .param("id", userId))
-        .andExpect(status().isAccepted())
+        .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
         .andExpect(jsonPath("$.userId", is(userId)))
         .andExpect(jsonPath("$.categories", is(categories)));
@@ -112,10 +112,10 @@ public class UserControllerTest {
     this.mockMvc.perform(put("/user")
         .contentType(contentType)
         .content(updatedUserJson))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
     this.mockMvc.perform(get("/user")
         .param("id", userId))
-        .andExpect(status().isAccepted())
+        .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
         .andExpect(jsonPath("$.userId", is(userId)))
         .andExpect(jsonPath("$.categories", is(updatedCategories)));
@@ -136,6 +136,6 @@ public class UserControllerTest {
 
     this.mockMvc.perform(delete("/user")
         .param("id", userId))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
   }
 }

@@ -5,6 +5,8 @@ import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 
+import java.util.UUID;
+
 public class Main {
   public static void main(String[] args) {
     try {
@@ -12,8 +14,7 @@ public class Main {
       conf.setJobName("VoteAggregator");
       conf.setMapperClass(MyMapper.class);
       conf.setInputFormat(TopicsInputFormat.class);
-      System.out.println(args[0]);
-      FileOutputFormat.setOutputPath(conf, new Path(args[0]));
+      FileOutputFormat.setOutputPath(conf, new Path("user/vishnu/" + UUID.randomUUID().toString().replace('-', '0')));
       JobClient.runJob(conf);
     } catch (Exception e) {
       e.printStackTrace();

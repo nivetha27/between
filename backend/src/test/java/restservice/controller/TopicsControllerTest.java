@@ -75,7 +75,7 @@ public class TopicsControllerTest {
         .param("page", "1")
         .param("limit", "20")
         .contentType(contentType))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -88,7 +88,7 @@ public class TopicsControllerTest {
         .param("page", "1")
         .param("limit", "20")
         .contentType(contentType))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -101,7 +101,7 @@ public class TopicsControllerTest {
         .param("page", "1")
         .param("limit", "20")
         .contentType(contentType))
-        .andExpect(status().isAccepted());
+        .andExpect(status().isOk());
   }
 
   private void voteTopics(String userId, int count) throws Exception {
@@ -117,7 +117,7 @@ public class TopicsControllerTest {
       this.mockMvc.perform(post("/vote")
           .contentType(contentType)
           .content(voteJson))
-          .andExpect(status().isCreated());
+          .andExpect(status().isOk());
     }
   }
 

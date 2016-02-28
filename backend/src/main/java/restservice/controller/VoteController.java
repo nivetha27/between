@@ -29,7 +29,7 @@ public class VoteController {
     try {
       validateVote(voteTopicRequest);
       application.voteTopic(voteTopicRequest.toCoreVote());
-      return new ResponseEntity<>(HttpStatus.CREATED);
+      return new ResponseEntity<>(HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (AlreadyVotedException e) {

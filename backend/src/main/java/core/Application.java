@@ -5,7 +5,9 @@ import core.entities.User;
 import core.entities.Vote;
 import core.exceptions.EntityNotFoundException;
 import dataprovider.DataProvider;
+import imageuploader.ImageUploader;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +15,12 @@ public class Application {
 
   private final DataProvider dataProvider;
 
-  public Application(DataProvider dataProvider) {
+  private final ImageUploader imageUploader;
+
+  public Application(DataProvider dataProvider, ImageUploader imageUploader)
+  {
     this.dataProvider = dataProvider;
+    this.imageUploader = imageUploader;
   }
 
   public void createUser(User user) {
@@ -37,8 +43,8 @@ public class Application {
     dataProvider.deleteUser(userId);
   }
 
-  public void createTopic(Topic topic) {
-      dataProvider.createTopic(topic);
+  public String createTopic(Topic topic) {
+      return dataProvider.createTopic(topic);
   }
 
   public Topic getTopic(String topicId) {
@@ -67,5 +73,9 @@ public class Application {
 
   public List<Topic> listTopicsVotedByUser(String userId, Integer pageNumber, Integer limit) {
     return dataProvider.getTopicsVotedByUser(userId, pageNumber, limit);
+  }
+
+  public String uploadImage(InputStream inputStream) {
+    return imageUploader.uploadImage(inputStream);
   }
 }

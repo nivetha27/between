@@ -18,7 +18,7 @@ public interface DataProvider {
 
   void deleteUser(String userId);
 
-  void createTopic(Topic topic);
+  String createTopic(Topic topic);
 
   void deleteTopic(String topicId);
 

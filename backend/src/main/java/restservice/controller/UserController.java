@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.bind.annotation.*;
+
+import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/user")
@@ -41,7 +44,7 @@ public class UserController {
     try {
       Preconditions.checkState(!Strings.isNullOrEmpty(userId), "userId cannot be null or empty");
       core.entities.User user = application.getUser(userId);
-      return new ResponseEntity(user, HttpStatus.ACCEPTED);
+      return new ResponseEntity(user, HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (EntityNotFoundException e) {
@@ -57,7 +60,7 @@ public class UserController {
     try {
       Preconditions.checkState(!Strings.isNullOrEmpty(userId), "userId cannot be null or empty");
       application.deleteUser(userId);
-      return new ResponseEntity(HttpStatus.ACCEPTED);
+      return new ResponseEntity(HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (EntityNotFoundException e) {
@@ -73,7 +76,7 @@ public class UserController {
     try {
       Preconditions.checkState(!Strings.isNullOrEmpty(updateUserRequest.getUserId()), "userId cannot be null or empty");
       application.updateUser(updateUserRequest.toCoreUser());
-      return new ResponseEntity(HttpStatus.ACCEPTED);
+      return new ResponseEntity(HttpStatus.OK);
     } catch (IllegalStateException e) {
       return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     } catch (EntityNotFoundException e) {
