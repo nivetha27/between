@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import static restservice.controller.TestUtils.json;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Main.class)
+@SpringApplicationConfiguration(classes = SpringBootConfiguration.class)
 @WebAppConfiguration
 public class UserControllerTest {
   private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),

@@ -100,7 +100,7 @@ public class TopicController {
   }
 
   private void validateChoice(Choice choice) {
-    Preconditions.checkState(!Strings.isNullOrEmpty(choice.getCaption()), "choice caption should not be null or empty");
-    Preconditions.checkState(!Strings.isNullOrEmpty(choice.getImageUrl()), "choice imageUrl should not be null or empty");
+    Preconditions.checkState(!Strings.isNullOrEmpty(choice.getCaption()) || !Strings.isNullOrEmpty(choice.getImageUrl()),
+        "choice caption and/or choice imageUrl should be specified");
   }
 }

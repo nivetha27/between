@@ -1,5 +1,7 @@
 package core;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3Client;
 import core.entities.Choice;
 import core.entities.User;
 import core.entities.Topic;
@@ -9,6 +11,7 @@ import dataprovider.dynamodb.client.LocalDynamoDBClientProvider;
 import dataprovider.dynamodb.model.Vote;
 import dataprovider.dynamodb.table.TableCreator;
 import dataprovider.dynamodb.table.TableCreatorFactory;
+import imageuploader.S3ImageUploader;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,7 +24,8 @@ public class ApplicationTest {
 
   private final static TableCreator tableCreator = TableCreatorFactory.create();
 
-  private final Application application = new Application(new DynamoDBDataProvider(new LocalDynamoDBClientProvider()));
+  private final Application application = new Application(new DynamoDBDataProvider(new LocalDynamoDBClientProvider()),
+      new S3ImageUploader(new AmazonS3Client(new InstanceProfileCredentialsProvider()), "between-prod"));
 
   @BeforeClass
   public static void init() {

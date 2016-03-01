@@ -1,4 +1,4 @@
-package restservice;
+package restservice.controller;
 
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
@@ -15,18 +15,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Main {
+public class SpringBootConfiguration {
 
   private final static TableCreator tableCreator = TableCreatorFactory.create();
 
   @Bean
   public Application getApplication() {
-    return new Application(new DynamoDBDataProvider(new InstanceProfileDynamoDBClientProvider()),
+    return new Application(new DynamoDBDataProvider(new LocalDynamoDBClientProvider()),
+        // todo: setup mock s3 client
         new S3ImageUploader(new AmazonS3Client(new InstanceProfileCredentialsProvider()), "between-prod"));
-  }
-
-  public static void main(String[] args) {
-    tableCreator.createIfNotExists();
-    SpringApplication.run(Main.class, args);
   }
 }

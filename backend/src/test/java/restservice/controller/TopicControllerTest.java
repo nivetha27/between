@@ -1,9 +1,12 @@
 package restservice.controller;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3Client;
 import core.Application;
 import core.entities.Topic;
 import dataprovider.dynamodb.DynamoDBDataProvider;
 import dataprovider.dynamodb.client.LocalDynamoDBClientProvider;
+import imageuploader.S3ImageUploader;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,11 +41,12 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import static restservice.controller.TestUtils.json;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Main.class)
+@SpringApplicationConfiguration(classes = SpringBootConfiguration.class)
 @WebAppConfiguration
 public class TopicControllerTest {
 
-  private final Application application = new Application(new DynamoDBDataProvider(new LocalDynamoDBClientProvider()));
+  private final Application application = new Application(new DynamoDBDataProvider(new LocalDynamoDBClientProvider()),
+      new S3ImageUploader(new AmazonS3Client(new InstanceProfileCredentialsProvider()), "between-test"));
 
   private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
       MediaType.APPLICATION_JSON.getSubtype(),
